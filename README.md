@@ -4,7 +4,7 @@
 pill-style panel tabs, 40px tab bar, Trae's typography — for
 **Devin / Windsurf**, **VS Code**, **Cursor** and **Antigravity**.
 
-![screenshot](assets/screenshot.png)
+![screenshot](assets/trae-look.png)
 
 Every value in the stylesheet was **measured on a live Trae instance** through
 the Chrome DevTools Protocol (`getComputedStyle`, `getBoundingClientRect`) —
