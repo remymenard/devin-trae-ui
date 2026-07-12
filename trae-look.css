@@ -259,6 +259,20 @@ div#terminal { border-radius: 0 !important; margin: 0 !important; overflow: visi
   background: rgba(224,226,242,0.08) !important;
   border-radius: 8px 0 8px 8px !important;
   padding: 8px 12px !important;
+  /* définition des grosses bulles (résumés type "Key Details") : bordure
+     fine + interligne Trae (13/22.4 mesuré) au lieu de 18px trop serré */
+  border: 1px solid rgba(224,226,242,0.08) !important;
+  line-height: 22px !important;
+}
+/* titres dans les grosses bulles: un peu d'air au-dessus des sections */
+.chat-client-root [class*="message-wrapper"] .bg-tint-tertiary h1,
+.chat-client-root [class*="message-wrapper"] .bg-tint-tertiary h2,
+.chat-client-root [class*="message-wrapper"] .bg-tint-tertiary h3,
+.chat-client-root [class*="message-wrapper"] .bg-tint-tertiary strong {
+  line-height: 20px;
+}
+.chat-client-root [class*="message-wrapper"] .bg-tint-tertiary ul {
+  margin: 4px 0 !important;
 }
 .chat-client-root [class*="message-wrapper"] .bg-tint-tertiary [class*="p-3"] {
   padding: 0 !important;
