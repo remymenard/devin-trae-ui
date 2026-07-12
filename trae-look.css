@@ -186,6 +186,12 @@ div#terminal { border-radius: 0 !important; margin: 0 !important; overflow: visi
    Antigravity — they are inert there.
    ============================================================ */
 
+/* ============================================================
+   Sections 16-22: Devin/Windsurf agent panel (chat-client-root).
+   These selectors match nothing in stock VS Code / Cursor /
+   Antigravity — they are inert there.
+   ============================================================ */
+
 /* ---- 16. CHAT SIDEBAR (chat-client-root) : il est monté HORS de
         .part.auxiliarybar (div sans classe sous .monaco-workbench),
         donc il échappait au traitement card -> on le lui applique.
