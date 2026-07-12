@@ -1,0 +1,308 @@
+/* ============================================================
+   trae-look.css — Trae-style UI for VS Code-family editors.
+
+   Every value here was MEASURED on a live Trae instance
+   (ByteDance's IDE) via Chrome DevTools Protocol
+   (getComputedStyle / getBoundingClientRect) — not eyeballed.
+
+   Structure: dark "cards" (editor/sidebar/panel/aux) on a slightly
+   lighter chrome, separated by real 4px gaps. Gaps are produced with
+   clip-path (margins break VS Code's absolutely-positioned grid).
+   Colors are theme-aware (var(--vscode-*)) so any theme works.
+
+   Injected between TRAE-LOOK sentinels by install.sh / install.ps1.
+   https://github.com/remymenard/devin-trae-ui
+   ============================================================ */
+
+/* ---- 0. Font UI de Trae (stack identique, fallback système pareil) ---- */
+.monaco-workbench {
+  font-family: "SF Pro Text", system-ui, Ubuntu, "Droid Sans", sans-serif;
+}
+
+/* ---- 1. Chrome (fond du workbench) = #232A35, PLUS CLAIR que les cards.
+        Transparaît dans les gaps et les coins arrondis. ---- */
+.monaco-workbench,
+.monaco-workbench .monaco-grid-view {
+  background-color: var(--vscode-activityBar-background, #232A35) !important;
+}
+
+/* ---- 2. LES CARDS : fond sombre + radius + gap par clip-path.
+        Mesures Trae: sidebar margin-left 6px; editor/panel/aux 4px left,
+        4px bottom; radius 6px. clip-path reproduit ça sans toucher au grid. ---- */
+.monaco-workbench .part.sidebar {
+  background-color: var(--vscode-editor-background, #181D27) !important;
+  border-radius: 6px;
+  /* pas de clip gauche : l'activity bar Devin (48px vs 38 chez Trae) a déjà
+     ~8px de marge interne -> gap visuel déjà suffisant */
+  clip-path: inset(0 0 4px 0 round 6px);
+}
+.monaco-workbench .part.editor > .content .editor-group-container {
+  background-color: var(--vscode-editor-background, #181D27) !important;
+  border-radius: 6px;
+  clip-path: inset(0 0 4px 4px round 6px);
+}
+.monaco-workbench .part.panel {
+  background-color: var(--vscode-editor-background, #181D27) !important;
+  border-radius: 6px;
+  clip-path: inset(0 0 4px 4px round 6px);
+}
+.monaco-workbench .part.auxiliarybar {
+  background-color: var(--vscode-editor-background, #181D27) !important;
+  border-radius: 6px;
+  clip-path: inset(0 4px 4px 4px round 6px);
+}
+/* séparateurs de split-view (#444 par défaut VS Code, non défini par le
+   thème Trae) -> supprimés partout, les gaps clip-path délimitent déjà */
+.monaco-workbench .split-view-view::before {
+  background-color: transparent !important;
+}
+
+/* activity bar / titlebar / statusbar : fondues dans le chrome (comme Trae) */
+.monaco-workbench .part.activitybar,
+.monaco-workbench .part.titlebar,
+.monaco-workbench .part.statusbar {
+  background-color: transparent !important;
+}
+
+/* ---- 3. Sidebar = UN panneau continu (fix validé) ---- */
+.monaco-workbench .part.sidebar .monaco-pane-view .pane,
+.monaco-workbench .part.sidebar .monaco-pane-view .pane > .pane-header,
+.monaco-workbench .part.sidebar .monaco-pane-view .pane > .pane-body {
+  border-radius: 0 !important; margin: 0 !important; background: transparent !important;
+}
+.monaco-workbench .part.sidebar > .title { background: transparent !important; }
+
+/* ---- 4. Panels remplissent l'espace (fix validé) ---- */
+.monaco-workbench .part.panel .pane-body,
+.monaco-workbench .pane-body.integrated-terminal .terminal-split-pane,
+div#terminal { border-radius: 0 !important; margin: 0 !important; overflow: visible !important; }
+
+/* ---- 5. Pane headers (OUTLINE/TIMELINE…) : 11px bold 700, mesuré Trae ---- */
+.monaco-workbench .pane > .pane-header {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+}
+
+/* ---- 6. Panel switcher (PROBLEMS/OUTPUT/TERMINAL) : les pills Trae.
+        Mesuré: 28px, radius 4, font 12 w500 UPPERCASE, bg overlay .05,
+        gap 6px. C'est LE détail qui fait le look Trae. ---- */
+.monaco-workbench .part.panel .composite-bar .monaco-action-bar .action-item {
+  height: 28px !important;
+  align-self: center;
+  padding: 0 8px !important;
+  margin-right: 6px !important;
+  border-radius: 4px !important;
+  background-color: rgba(224,226,242,0.05) !important;
+  display: flex; align-items: center;
+}
+.monaco-workbench .part.panel .composite-bar .monaco-action-bar .action-item.checked {
+  background-color: rgba(224,226,242,0.12) !important;
+}
+.monaco-workbench .part.panel .composite-bar .monaco-action-bar .action-label {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  text-transform: uppercase;
+}
+/* la ligne soulignée d'onglet actif ne colle pas au look pill -> masquée */
+.monaco-workbench .part.panel .composite-bar .action-item .active-item-indicator { display: none !important; }
+
+/* ---- 7. Tabs éditeur : actif = fond card, séparateur discret, padding Trae ---- */
+.monaco-workbench .tabs-container > .tab {
+  padding: 0 6px 0 12px !important;
+  border-right: 1px solid rgba(224,226,242,0.09) !important;
+  border-bottom: none !important;
+}
+.monaco-workbench .tabs-container > .tab.active { background-color: var(--vscode-editor-background, #181D27) !important; }
+
+/* ---- 8. Boutons : radius 4 (pas 6), poids 500 — mesuré Trae ---- */
+.monaco-workbench .monaco-button,
+.monaco-workbench a.monaco-button,
+.monaco-workbench .monaco-text-button {
+  border-radius: 4px !important;
+  font-weight: 500 !important;
+}
+
+/* ---- 9. Inputs : radius 4, bordure + fond overlay bleutés (Deep Blue) ---- */
+.monaco-workbench .monaco-inputbox {
+  border-radius: 4px !important;
+  background-color: rgba(224,226,242,0.04) !important;
+  border: 1px solid rgba(224,226,242,0.13) !important;
+}
+
+/* ---- 10. Icônes de toolbar : 16px, radius 5, padding 3 (mesuré) ---- */
+.monaco-workbench .part > .title .actions-container .action-label,
+.monaco-workbench .editor-actions .action-label {
+  border-radius: 5px !important;
+  padding: 3px !important;
+}
+
+/* ---- 11. Activity bar : icônes 20px dans un carré 32×32 radius 4,
+        sélection = overlay bleuté (mesuré) ---- */
+.monaco-workbench .part.activitybar .monaco-action-bar .action-label {
+  font-size: 20px !important;
+  width: 32px !important; height: 32px !important;
+  padding: 5px !important;
+  border-radius: 4px !important;
+  display: flex; align-items: center; justify-content: center;
+}
+.monaco-workbench .part.activitybar .monaco-action-bar .action-item {
+  margin-bottom: 6px !important;
+}
+.monaco-workbench .part.activitybar .monaco-action-bar .action-item.checked .action-label {
+  background-color: rgba(224,226,242,0.12) !important;
+}
+.monaco-workbench .part.activitybar .action-item .active-item-indicator { display: none !important; }
+
+/* ---- 12. Badges : JetBrains Mono 10 w500, très arrondis (mesuré) ---- */
+.monaco-workbench .monaco-count-badge {
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  border-radius: 12px !important;
+  padding: 0 4px !important;
+}
+
+/* ---- 12b. Titre de fenêtre (vue Agent) : son conteneur portait un fond
+        de barre d'onglets -> transparent, uniforme avec la titlebar ---- */
+.monaco-workbench .part.titlebar [class*="grid-cols-"] {
+  background-color: transparent !important;
+}
+
+/* ---- 13. Status bar : 11px, fondue dans le chrome ---- */
+.monaco-workbench .part.statusbar { font-size: 11px !important; }
+
+/* ---- 14. Widgets flottants ---- */
+.quick-input-widget { border-radius: 12px !important; box-shadow: 0px 3px 16px -2px rgba(0,0,0,.3) !important; }
+.monaco-editor .find-widget { border-radius: 8px !important; }
+.monaco-workbench .notification-toast { border-radius: 8px !important; }
+
+/* ---- 15. Chat/agent : un peu d'air ---- */
+.monaco-workbench .interactive-item-container { padding: 12px 16px !important; }
+.monaco-workbench .interactive-session-followups { gap: 6px !important; }
+
+/* ============================================================
+   Sections 16-22: Devin/Windsurf agent panel (chat-client-root).
+   These selectors match nothing in stock VS Code / Cursor /
+   Antigravity — they are inert there.
+   ============================================================ */
+
+/* ---- 16. CHAT SIDEBAR (chat-client-root) : il est monté HORS de
+        .part.auxiliarybar (div sans classe sous .monaco-workbench),
+        donc il échappait au traitement card -> on le lui applique.
+        Même clip que les autres parties : gap 4px + radius 6. ---- */
+/* cas A: overlay SIDEBAR (a son strip d'onglets de session h-[35px]) */
+.monaco-workbench > div:is(:not([class]),[class=""]) > .chat-client-root:has([class*="h-[35px]"]) {
+  clip-path: inset(0 4px 4px 4px round 6px);
+  border-radius: 6px;
+  background-color: var(--vscode-editor-background, #181D27) !important;
+}
+/* cas B: overlay ONGLET AGENT (contenu sous les tabs VS Code, pas de strip):
+   il déborde du group clippé -> on reproduit le clip du group (bas+gauche) */
+.monaco-workbench > div:is(:not([class]),[class=""]) > .chat-client-root:not(:has([class*="h-[35px]"])) {
+  clip-path: inset(0 0 4px 4px round 0 0 6px 6px);
+  background-color: var(--vscode-editor-background, #181D27) !important;
+}
+
+/* ---- 17. Input du chat façon Trae : UNE seule card.
+        Le tray de boutons (Mode/Effort/…, .bg-tint-tertiary) est détaché
+        visuellement de la zone de saisie (.bg-bg-elevated) -> on unifie
+        les fonds et on aligne bordure/radius sur le style Trae. ---- */
+.chat-client-root [class*="text-ide-message-block-bot-color"] .bg-bg-elevated {
+  background-color: var(--vscode-activityBar-background, #232A35) !important;
+  border-radius: 6px 6px 0 0 !important;
+  border-color: rgba(224,226,242,0.13) !important;
+}
+/* le TRAY de boutons = le bg-tint-tertiary qui SUIT l'input (structurel,
+   pas de pattern mt-/mb- fragile). Les bannières au-dessus (Sharing
+   context…) gardent leur style natif rounded-tl-xl. */
+.chat-client-root [class*="text-ide-message-block-bot-color"] .bg-bg-elevated ~ .bg-tint-tertiary {
+  background-color: var(--vscode-activityBar-background, #232A35) !important;
+  border-radius: 0 0 6px 6px !important;
+  border: 1.2px solid rgba(224,226,242,0.13) !important;
+  border-top: none !important;
+}
+/* bannières avant l'input: juste harmoniser le fond, coins natifs conservés */
+.chat-client-root [class*="text-ide-message-block-bot-color"] .bg-tint-tertiary:has(~ .bg-bg-elevated),
+.chat-client-root [class*="text-ide-message-block-bot-color"] [class*="rounded-tl-xl"][class*="bg-tint-tertiary"] {
+  background-color: var(--vscode-activityBar-background, #232A35) !important;
+}
+/* un peu d'air autour de la zone d'input (comme Trae) */
+.chat-client-root [class*="text-ide-message-block-bot-color"] {
+  padding: 0 10px !important;
+  margin-bottom: 6px !important;
+}
+
+/* ---- 18. Onglets de session du chat : même hauteur que la barre
+        d'onglets de fichiers (40px). Le conteneur h-[35px] capait tout. ---- */
+.chat-client-root [class*="h-[35px]"] { height: 40px !important; }
+/* strip des chats = même fond que la barre des fichiers (editorGroupHeader) */
+.chat-client-root [class*="z-40"][class*="gap-px"],
+.chat-client-root [class*="h-[35px]"] {
+  background-color: var(--vscode-editorGroupHeader-tabsBackground, #17191A) !important;
+}
+.chat-client-root [class*="h-[34px]"] { height: 39px !important; }
+
+/* ---- 19. Tokens d'accent cassés dans le chat (résolvent en noir avec
+        les thèmes Trae) -> accent bleu Trae mesuré (#7BB8FF).
+        Format "R G B" (pattern Tailwind rgb(var(--x))). ---- */
+.chat-client-root, .chat-client-root.dark {
+  --text-accent-primary: 123 184 255 !important;
+  --border-accent-primary: 123 184 255 !important;
+}
+
+/* ---- 20. Bulle message utilisateur façon Trae : arrondie + padding,
+        au lieu du chip natif sans padding ---- */
+/* Bulle utilisateur = spec EXACTE Trae (mesurée sur .user-chat-bubble):
+   alignée à droite, bg overlay .08, radius 8/0/8/8, padding 8x12.
+   Devin double le padding avec un p-3 interne -> neutralisé. */
+.chat-client-root [class*="message-wrapper"] .bg-tint-tertiary {
+  background: rgba(224,226,242,0.08) !important;
+  border-radius: 8px 0 8px 8px !important;
+  padding: 8px 12px !important;
+}
+.chat-client-root [class*="message-wrapper"] .bg-tint-tertiary [class*="p-3"] {
+  padding: 0 !important;
+}
+/* respiration entre tours (Trae: user 16px, assistant 24px) */
+.chat-client-root [class*="acp-agent-message"] { margin-top: 8px !important; }
+
+/* ---- 21. Passe finale — composants Trae restants (menus, hovers,
+        suggest, selects, checkbox), rayons mesurés/du design system ---- */
+.monaco-menu-container { border-radius: 8px !important; overflow: hidden; }
+.monaco-menu { border-radius: 8px !important; }
+.context-view { border-radius: 8px !important; }
+.monaco-select-box { border-radius: 4px !important; }
+.monaco-hover { border-radius: 6px !important; }
+.monaco-editor .suggest-widget { border-radius: 8px !important; }
+.monaco-editor .monaco-editor-overlaymessage .message { border-radius: 6px !important; }
+.monaco-custom-toggle { border-radius: 4px !important; }
+.monaco-workbench .monaco-scrollable-element > .scrollbar > .slider { border-radius: 4px !important; }
+.monaco-editor .parameter-hints-widget { border-radius: 8px !important; }
+.monaco-workbench .part.titlebar .action-item { border-radius: 5px !important; }
+
+/* ---- 22. Onglets de session du chat : l'actif était invisible
+        (bg-ide-tab-active-background-color = fond du panneau).
+        -> overlay + underline accent + texte plus clair. ---- */
+/* même design que les onglets de fichiers: inactif sombre, actif = fond card */
+.chat-client-root [class*="h-[34px]"] {
+  background-color: var(--vscode-tab-inactiveBackground, #161718) !important;
+  border-right: 1px solid rgba(224,226,242,0.09) !important;
+}
+.chat-client-root div[class*="bg-ide-tab-active-background-color"] {
+  background-color: var(--vscode-editor-background, #181D27) !important;
+  /* même indicateur que les fichiers: barre blanche en haut (tab.activeBorderTop) */
+  box-shadow: inset 0 1px 0 0 var(--vscode-tab-activeBorderTop, #FFFFFF) !important;
+  color: #F5F9FE !important;
+}
+/* la croix de fermeture partage la classe bg de l'onglet -> neutralisée */
+.chat-client-root button[class*="bg-ide-tab-active-background-color"] {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 4px !important;
+}
+.chat-client-root button[class*="bg-ide-tab-active-background-color"]:hover {
+  background: rgba(224,226,242,0.12) !important;
+}
+.chat-client-root [class*="hover:bg-ide-tab-hover"]:hover {
+  background-color: rgba(224,226,242,0.04) !important;
+}
